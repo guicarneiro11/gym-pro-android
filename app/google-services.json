@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "20366521271",
+    "project_id": "gym-pro-aca50",
+    "storage_bucket": "gym-pro-aca50.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20366521271:android:c1aaa3473058a0bcbfee32",
+        "android_client_info": {
+          "package_name": "com.guicarneirodev.gympro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoI5sp5jgFbwM6Rt3amxZ7Aiio5YCwuJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
