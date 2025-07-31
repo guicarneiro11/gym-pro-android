@@ -1,0 +1,78 @@
+<resources>
+    <string name="app_name">GymPro</string>
+
+    <!-- Common -->
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="loading">Cargando…</string>
+    <string name="error_connection">Error de conexión. Verifica tu internet</string>
+    <string name="error_generic">Ocurrió un error. Intenta nuevamente</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete">Eliminar</string>
+    <string name="edit">Editar</string>
+
+    <!-- Login -->
+    <string name="login_title">Bienvenido a GymPro</string>
+    <string name="login_button">Iniciar Sesión</string>
+    <string name="login_register_prompt">¿No tienes una cuenta?</string>
+    <string name="login_register_button">Regístrate</string>
+    <string name="login_error_empty_email">Por favor ingresa tu correo</string>
+    <string name="login_error_invalid_email">Correo inválido</string>
+    <string name="login_error_short_password">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="login_error_wrong_password">Contraseña incorrecta</string>
+    <string name="login_error_user_not_found">Usuario no encontrado</string>
+
+    <!-- Register -->
+    <string name="register_title">Crear Cuenta</string>
+    <string name="register_button">Registrarse</string>
+    <string name="register_confirm_password">Confirmar Contraseña</string>
+    <string name="register_error_passwords_not_match">Las contraseñas no coinciden</string>
+    <string name="register_error_weak_password">La contraseña debe contener letras y números</string>
+    <string name="register_error_email_in_use">Este correo ya está registrado</string>
+
+    <!-- Workouts -->
+    <string name="workouts_title">Mis Entrenamientos</string>
+    <string name="workout_add_button">Nuevo Entrenamiento</string>
+    <string name="workout_empty_state">Sin entrenamientos aún.\n¡Toca + para crear tu primer entrenamiento!</string>
+    <string name="workout_name_hint">Nombre del entrenamiento</string>
+    <string name="workout_description_hint">Descripción (opcional)</string>
+    <string name="workout_delete_confirmation">¿Eliminar este entrenamiento?</string>
+
+    <!-- Exercises -->
+    <string name="exercises_title">Ejercicios</string>
+    <string name="exercise_add_button">Agregar Ejercicio</string>
+    <string name="exercise_name_hint">Nombre del ejercicio</string>
+    <string name="exercise_observations_hint">Observaciones</string>
+    <string name="exercise_add_image">Agregar Imagen</string>
+    <string name="exercise_change_image">Cambiar Imagen</string>
+
+    <!-- Errors -->
+    <string name="error_loading_workouts">Error al cargar entrenamientos</string>
+    <string name="error_deleting_workout">Error al eliminar entrenamiento</string>
+
+    <!-- Workout Errors -->
+    <string name="error_loading_workout">Error al cargar entrenamiento</string>
+    <string name="error_user_not_authenticated">Usuario no autenticado</string>
+    <string name="error_updating_workout">Error al actualizar entrenamiento</string>
+    <string name="error_creating_workout">Error al crear entrenamiento</string>
+    <string name="error_empty_workout_name">Ingresa el nombre del entrenamiento</string>
+    <string name="error_workout_name_too_long">Nombre del entrenamiento demasiado largo</string>
+
+    <!-- Exercise Errors -->
+    <string name="error_loading_exercises">Error al cargar ejercicios</string>
+    <string name="error_deleting_exercise">Error al eliminar ejercicio</string>
+
+    <!-- Exercise Form -->
+    <string name="error_loading_exercise">Error al cargar ejercicio</string>
+    <string name="error_uploading_image">Error al subir imagen</string>
+    <string name="error_updating_exercise">Error al actualizar ejercicio</string>
+    <string name="error_creating_exercise">Error al crear ejercicio</string>
+    <string name="error_empty_exercise_name">Ingresa el nombre del ejercicio</string>
+    <string name="error_exercise_name_too_long">Nombre del ejercicio demasiado largo</string>
+
+    <!-- Image Options -->
+    <string name="image_option_camera">Tomar Foto</string>
+    <string name="image_option_gallery">Elegir de la Galería</string>
+    <string name="image_option_remove">Eliminar Imagen</string>
+</resources>

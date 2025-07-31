@@ -1,0 +1,78 @@
+<resources>
+    <string name="app_name">GymPro</string>
+
+    <!-- Common -->
+    <string name="email">E-mail</string>
+    <string name="password">Senha</string>
+    <string name="loading">Carregando…</string>
+    <string name="error_connection">Erro de conexão. Verifique sua internet</string>
+    <string name="error_generic">Ocorreu um erro. Tente novamente</string>
+    <string name="save">Salvar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete">Excluir</string>
+    <string name="edit">Editar</string>
+
+    <!-- Login -->
+    <string name="login_title">Bem-vindo ao GymPro</string>
+    <string name="login_button">Entrar</string>
+    <string name="login_register_prompt">Não tem uma conta?</string>
+    <string name="login_register_button">Cadastre-se</string>
+    <string name="login_error_empty_email">Digite seu e-mail</string>
+    <string name="login_error_invalid_email">E-mail inválido</string>
+    <string name="login_error_short_password">Senha deve ter pelo menos 6 caracteres</string>
+    <string name="login_error_wrong_password">Senha incorreta</string>
+    <string name="login_error_user_not_found">Usuário não encontrado</string>
+
+    <!-- Register -->
+    <string name="register_title">Criar Conta</string>
+    <string name="register_button">Cadastrar</string>
+    <string name="register_confirm_password">Confirmar Senha</string>
+    <string name="register_error_passwords_not_match">As senhas não coincidem</string>
+    <string name="register_error_weak_password">Senha deve conter letras e números</string>
+    <string name="register_error_email_in_use">Este e-mail já está cadastrado</string>
+
+    <!-- Workouts -->
+    <string name="workouts_title">Meus Treinos</string>
+    <string name="workout_add_button">Novo Treino</string>
+    <string name="workout_empty_state">Nenhum treino ainda.\nToque em + para criar seu primeiro treino!</string>
+    <string name="workout_name_hint">Nome do treino</string>
+    <string name="workout_description_hint">Descrição (opcional)</string>
+    <string name="workout_delete_confirmation">Excluir este treino?</string>
+
+    <!-- Exercises -->
+    <string name="exercises_title">Exercícios</string>
+    <string name="exercise_add_button">Adicionar Exercício</string>
+    <string name="exercise_name_hint">Nome do exercício</string>
+    <string name="exercise_observations_hint">Observações</string>
+    <string name="exercise_add_image">Adicionar Imagem</string>
+    <string name="exercise_change_image">Alterar Imagem</string>
+
+    <!-- Errors -->
+    <string name="error_loading_workouts">Erro ao carregar treinos</string>
+    <string name="error_deleting_workout">Erro ao excluir treino</string>
+
+    <!-- Workout Errors -->
+    <string name="error_loading_workout">Erro ao carregar treino</string>
+    <string name="error_user_not_authenticated">Usuário não autenticado</string>
+    <string name="error_updating_workout">Erro ao atualizar treino</string>
+    <string name="error_creating_workout">Erro ao criar treino</string>
+    <string name="error_empty_workout_name">Digite o nome do treino</string>
+    <string name="error_workout_name_too_long">Nome do treino muito longo</string>
+
+    <!-- Exercise Errors -->
+    <string name="error_loading_exercises">Erro ao carregar exercícios</string>
+    <string name="error_deleting_exercise">Erro ao excluir exercício</string>
+
+    <!-- Exercise Form -->
+    <string name="error_loading_exercise">Erro ao carregar exercício</string>
+    <string name="error_uploading_image">Erro ao enviar imagem</string>
+    <string name="error_updating_exercise">Erro ao atualizar exercício</string>
+    <string name="error_creating_exercise">Erro ao criar exercício</string>
+    <string name="error_empty_exercise_name">Digite o nome do exercício</string>
+    <string name="error_exercise_name_too_long">Nome do exercício muito longo</string>
+
+    <!-- Image Options -->
+    <string name="image_option_camera">Tirar Foto</string>
+    <string name="image_option_gallery">Escolher da Galeria</string>
+    <string name="image_option_remove">Remover Imagem</string>
+</resources>

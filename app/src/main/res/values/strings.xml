@@ -1,3 +1,78 @@
 <resources>
     <string name="app_name">GymPro</string>
+
+    <!-- Common -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="loading">Loading…</string>
+    <string name="error_connection">Connection error. Check your internet</string>
+    <string name="error_generic">An error occurred. Please try again</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+
+    <!-- Login -->
+    <string name="login_title">Welcome to GymPro</string>
+    <string name="login_button">Sign In</string>
+    <string name="login_register_prompt">Don\'t have an account?</string>
+    <string name="login_register_button">Sign Up</string>
+    <string name="login_error_empty_email">Please enter your email</string>
+    <string name="login_error_invalid_email">Invalid email</string>
+    <string name="login_error_short_password">Password must be at least 6 characters</string>
+    <string name="login_error_wrong_password">Incorrect password</string>
+    <string name="login_error_user_not_found">User not found</string>
+
+    <!-- Register -->
+    <string name="register_title">Create Account</string>
+    <string name="register_button">Sign Up</string>
+    <string name="register_confirm_password">Confirm Password</string>
+    <string name="register_error_passwords_not_match">Passwords do not match</string>
+    <string name="register_error_weak_password">Password must contain letters and numbers</string>
+    <string name="register_error_email_in_use">This email is already registered</string>
+
+    <!-- Workouts -->
+    <string name="workouts_title">My Workouts</string>
+    <string name="workout_add_button">New Workout</string>
+    <string name="workout_empty_state">No workouts yet.\nTap + to create your first workout!</string>
+    <string name="workout_name_hint">Workout name</string>
+    <string name="workout_description_hint">Description (optional)</string>
+    <string name="workout_delete_confirmation">Delete this workout?</string>
+
+    <!-- Exercises -->
+    <string name="exercises_title">Exercises</string>
+    <string name="exercise_add_button">Add Exercise</string>
+    <string name="exercise_name_hint">Exercise name</string>
+    <string name="exercise_observations_hint">Observations</string>
+    <string name="exercise_add_image">Add Image</string>
+    <string name="exercise_change_image">Change Image</string>
+
+    <!-- Errors -->
+    <string name="error_loading_workouts">Error loading workouts</string>
+    <string name="error_deleting_workout">Error deleting workout</string>
+
+    <!-- Workout Errors -->
+    <string name="error_loading_workout">Error loading workout</string>
+    <string name="error_user_not_authenticated">User not authenticated</string>
+    <string name="error_updating_workout">Error updating workout</string>
+    <string name="error_creating_workout">Error creating workout</string>
+    <string name="error_empty_workout_name">Please enter a workout name</string>
+    <string name="error_workout_name_too_long">Workout name is too long</string>
+
+    <!-- Exercise Errors -->
+    <string name="error_loading_exercises">Error loading exercises</string>
+    <string name="error_deleting_exercise">Error deleting exercise</string>
+
+    <!-- Exercise Form -->
+    <string name="error_loading_exercise">Error loading exercise</string>
+    <string name="error_uploading_image">Error uploading image</string>
+    <string name="error_updating_exercise">Error updating exercise</string>
+    <string name="error_creating_exercise">Error creating exercise</string>
+    <string name="error_empty_exercise_name">Please enter an exercise name</string>
+    <string name="error_exercise_name_too_long">Exercise name is too long</string>
+
+    <!-- Image Options -->
+    <string name="image_option_camera">Take Photo</string>
+    <string name="image_option_gallery">Choose from Gallery</string>
+    <string name="image_option_remove">Remove Image</string>
 </resources>
