@@ -19,7 +19,8 @@ data class WorkoutListUiState(
     val isLoading: Boolean = false,
     val errorMessage: UiText? = null,
     val isDeleteDialogVisible: Boolean = false,
-    val workoutToDelete: Workout? = null
+    val workoutToDelete: Workout? = null,
+    val isLogoutDialogVisible: Boolean = false
 )
 
 sealed class WorkoutListEvent {
@@ -124,5 +125,20 @@ class WorkoutListViewModel(
 
     fun clearError() {
         _uiState.update { it.copy(errorMessage = null) }
+    }
+
+    fun onLogoutClick() {
+        _uiState.update { it.copy(isLogoutDialogVisible = true) }
+    }
+
+    fun onConfirmLogout() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLogoutDialogVisible = false) }
+            authRepository.signOut()
+        }
+    }
+
+    fun onCancelLogout() {
+        _uiState.update { it.copy(isLogoutDialogVisible = false) }
     }
 }

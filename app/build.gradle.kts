@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -37,6 +38,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -65,6 +67,12 @@ dependencies {
 
     implementation(libs.coil.compose)
     implementation(libs.compose.shimmer)
+
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.androidx.appcompat)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

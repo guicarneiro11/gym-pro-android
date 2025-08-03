@@ -3,6 +3,7 @@ package com.guicarneirodev.gympro.data.repository
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.snapshots
+import com.guicarneirodev.gympro.data.local.preferences.UserPreferencesManager
 import com.guicarneirodev.gympro.data.mapper.toDomain
 import com.guicarneirodev.gympro.data.mapper.toDto
 import com.guicarneirodev.gympro.data.remote.dto.WorkoutDto
@@ -13,7 +14,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
 class WorkoutRepositoryImpl(
-    private val firestore: FirebaseFirestore
+    firestore: FirebaseFirestore,
+    private val userPreferencesManager: UserPreferencesManager
 ) : WorkoutRepository {
 
     private val workoutsCollection = firestore.collection("workouts")
@@ -23,6 +25,9 @@ class WorkoutRepositoryImpl(
             val documentRef = workoutsCollection.document()
             val workoutWithId = workout.copy(id = documentRef.id)
             documentRef.set(workoutWithId.toDto()).await()
+
+            userPreferencesManager.updateLastSync()
+
             Result.success(documentRef.id)
         } catch (e: Exception) {
             Result.failure(e)

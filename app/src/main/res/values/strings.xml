@@ -75,4 +75,47 @@
     <string name="image_option_camera">Take Photo</string>
     <string name="image_option_gallery">Choose from Gallery</string>
     <string name="image_option_remove">Remove Image</string>
+
+    <!-- Register -->
+    <string name="register_password_hint">Password must contain at least 6 characters with letters and numbers</string>
+
+    <!-- Workout Delete -->
+    <string name="workout_delete_message">This will delete "%1$s" and all its exercises. This action cannot be undone.</string>
+
+    <!-- Workout Form -->
+    <string name="workout_add_title">New Workout</string>
+    <string name="workout_edit_title">Edit Workout</string>
+    <string name="workout_edit_info">After saving, you will be redirected to manage exercises.</string>
+
+    <!-- Exercise List -->
+    <string name="exercise_empty_state">No exercises yet.\nTap + to add your first exercise!</string>
+    <string name="exercise_delete_confirmation">Delete exercise?</string>
+    <string name="exercise_delete_message">This will delete "%1$s". This action cannot be undone.</string>
+
+    <!-- Exercise Form -->
+    <string name="exercise_add_title">New Exercise</string>
+    <string name="exercise_edit_title">Edit Exercise</string>
+
+    <!-- Logout -->
+    <string name="logout_confirmation_title">Logout</string>
+    <string name="logout_confirmation_message">Are you sure you want to logout?</string>
+    <string name="logout_button">Logout</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_member_since">Member since %1$s</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+
+    <!-- Theme -->
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+
+    <!-- Language -->
+    <string name="language_system">System</string>
 </resources>

@@ -75,4 +75,47 @@
     <string name="image_option_camera">Tomar Foto</string>
     <string name="image_option_gallery">Elegir de la Galería</string>
     <string name="image_option_remove">Eliminar Imagen</string>
+
+    <!-- Register -->
+    <string name="register_password_hint">La contraseña debe contener al menos 6 caracteres con letras y números</string>
+
+    <!-- Workout Delete -->
+    <string name="workout_delete_message">Esto eliminará "%1$s" y todos sus ejercicios. Esta acción no se puede deshacer.</string>
+
+    <!-- Workout Form -->
+    <string name="workout_add_title">Nuevo Entrenamiento</string>
+    <string name="workout_edit_title">Editar Entrenamiento</string>
+    <string name="workout_edit_info">Después de guardar, serás redirigido para gestionar los ejercicios.</string>
+
+    <!-- Exercise List -->
+    <string name="exercise_empty_state">Sin ejercicios aún.\n¡Toca + para agregar tu primer ejercicio!</string>
+    <string name="exercise_delete_confirmation">¿Eliminar ejercicio?</string>
+    <string name="exercise_delete_message">Esto eliminará "%1$s". Esta acción no se puede deshacer.</string>
+
+    <!-- Exercise Form -->
+    <string name="exercise_add_title">Nuevo Ejercicio</string>
+    <string name="exercise_edit_title">Editar Ejercicio</string>
+
+    <!-- Logout -->
+    <string name="logout_confirmation_title">Cerrar Sesión</string>
+    <string name="logout_confirmation_message">¿Estás seguro de que quieres cerrar sesión?</string>
+    <string name="logout_button">Cerrar Sesión</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Configuración</string>
+    <string name="settings_member_since">Miembro desde %1$s</string>
+    <string name="settings_preferences">Preferencias</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_about">Acerca de</string>
+    <string name="settings_version">Versión</string>
+    <string name="settings_privacy_policy">Política de Privacidad</string>
+
+    <!-- Theme -->
+    <string name="theme_system">Sistema</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Oscuro</string>
+
+    <!-- Language -->
+    <string name="language_system">Sistema</string>
 </resources>

@@ -13,7 +13,7 @@ val viewModelModule = module {
     viewModel { LoginViewModel(get()) }
     viewModel { RegisterViewModel(get()) }
     viewModel { WorkoutListViewModel(get(), get()) }
-    viewModel { WorkoutFormViewModel(get()) }
-    viewModel { ExerciseListViewModel(get()) }
-    viewModel { ExerciseFormViewModel(get()) }
+    viewModel { WorkoutFormViewModel(get(), get(), get()) }
+    viewModel { ExerciseListViewModel(get(), get()) }
+    viewModel { ExerciseFormViewModel(get(), get()) }
 }
