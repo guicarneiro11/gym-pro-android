@@ -138,7 +138,7 @@ class RegisterViewModel(
                     "teste@gympro.com",
                     "teste123"
                 )
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // Usuário teste já existe
             }
         }

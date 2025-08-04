@@ -92,11 +92,13 @@ class ExerciseFormViewModel(
     }
 
     fun onObservationsChange(observations: String) {
-        _uiState.update {
-            it.copy(
-                observations = observations,
-                errorMessage = null
-            )
+        if (observations.length <= 200) {
+            _uiState.update {
+                it.copy(
+                    observations = observations,
+                    errorMessage = null
+                )
+            }
         }
     }
 

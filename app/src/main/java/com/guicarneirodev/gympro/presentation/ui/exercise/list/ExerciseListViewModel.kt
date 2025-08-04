@@ -7,6 +7,7 @@ import com.guicarneirodev.gympro.R
 import com.guicarneirodev.gympro.domain.model.Exercise
 import com.guicarneirodev.gympro.domain.repository.ExerciseRepository
 import com.guicarneirodev.gympro.presentation.util.UiText
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,6 +18,7 @@ data class ExerciseListUiState(
     val exercises: List<Exercise> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: UiText? = null,
+    val isRefreshing: Boolean = false,
     val isDeleteDialogVisible: Boolean = false,
     val exerciseToDelete: Exercise? = null,
     val workoutId: String = ""
@@ -32,9 +34,7 @@ class ExerciseListViewModel(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val workoutId: String = checkNotNull(savedStateHandle["workoutId"]) {
-        "Workout ID is required"
-    }
+    private val workoutId: String = checkNotNull(savedStateHandle["workoutId"])
 
     private val _uiState = MutableStateFlow(ExerciseListUiState(workoutId = workoutId))
     val uiState = _uiState.asStateFlow()
@@ -43,28 +43,20 @@ class ExerciseListViewModel(
     val events = _events.asStateFlow()
 
     init {
-        observeExercises()
+        savedStateHandle.get<String>("workoutId")?.let { workoutId ->
+            _uiState.update { it.copy(isLoading = true) }
+            observeExercises(workoutId)
+        }
     }
 
-    private fun observeExercises() {
+    private fun observeExercises(workoutId: String) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-
             exerciseRepository.getExercisesByWorkout(workoutId)
-                .catch { exception ->
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            errorMessage = UiText.StringResource(R.string.error_loading_exercises)
-                        )
-                    }
-                }
                 .collect { exercises ->
                     _uiState.update {
                         it.copy(
                             exercises = exercises,
-                            isLoading = false,
-                            errorMessage = null
+                            isLoading = false
                         )
                     }
                 }
@@ -124,5 +116,15 @@ class ExerciseListViewModel(
 
     fun clearError() {
         _uiState.update { it.copy(errorMessage = null) }
+    }
+
+    fun onRefresh() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isRefreshing = true) }
+            delay(300)
+            observeExercises(workoutId)
+
+            _uiState.update { it.copy(isRefreshing = false) }
+        }
     }
 }

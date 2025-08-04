@@ -3,6 +3,7 @@ package com.guicarneirodev.gympro
 import android.app.Application
 import com.guicarneirodev.gympro.di.appModule
 import com.guicarneirodev.gympro.di.dataModule
+import com.guicarneirodev.gympro.di.databaseModule
 import com.guicarneirodev.gympro.di.firebaseModule
 import com.guicarneirodev.gympro.di.repositoryModule
 import com.guicarneirodev.gympro.di.viewModelModule
@@ -21,6 +22,7 @@ class GymProApplication : Application() {
             modules(
                 appModule,
                 dataModule,
+                databaseModule,
                 firebaseModule,
                 repositoryModule,
                 viewModelModule

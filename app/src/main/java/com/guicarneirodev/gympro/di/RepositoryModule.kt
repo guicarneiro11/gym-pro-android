@@ -20,11 +20,25 @@ val repositoryModule = module {
             userPreferencesManager = get()
         )
     }
-    single<WorkoutRepository> { WorkoutRepositoryImpl(get(), get())}
+
+    single<WorkoutRepository> {
+        WorkoutRepositoryImpl(
+            firestore = get(),
+            workoutDao = get(),
+            networkMonitor = get(),
+            syncManager = get(),
+            getCurrentUserId = { get<FirebaseAuth>().currentUser?.uid }
+        )
+    }
+
     single<ExerciseRepository> {
         ExerciseRepositoryImpl(
+            context = androidContext(),
             firestore = get(),
             storage = get(),
+            exerciseDao = get(),
+            networkMonitor = get(),
+            syncManager = get(),
             getCurrentUserId = { get<FirebaseAuth>().currentUser?.uid }
         )
     }

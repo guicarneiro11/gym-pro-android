@@ -18,8 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.guicarneirodev.gympro.R
 import com.guicarneirodev.gympro.domain.model.Exercise
 import org.koin.androidx.compose.koinViewModel
@@ -27,7 +25,13 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.ui.graphics.Color
+import com.guicarneirodev.gympro.data.util.SyncManager
+import com.guicarneirodev.gympro.presentation.ui.components.ExerciseListSkeleton
+import com.guicarneirodev.gympro.presentation.ui.components.ImageWithLoading
+import com.guicarneirodev.gympro.presentation.ui.components.SyncIndicator
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +44,16 @@ fun ExerciseListScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val syncManager: SyncManager = koinInject()
+    val isSyncing by syncManager.isSyncing.collectAsStateWithLifecycle()
+
+    val hasInitialLoadCompleted = remember { mutableStateOf(false) }
+
+    LaunchedEffect(uiState.isLoading) {
+        if (!uiState.isLoading && !hasInitialLoadCompleted.value) {
+            hasInitialLoadCompleted.value = true
+        }
+    }
 
     LaunchedEffect(events) {
         when (val event = events) {
@@ -61,72 +75,77 @@ fun ExerciseListScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.exercises_title),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = viewModel::onBackClick) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_back),
-                            contentDescription = "Navigate back"
+            Column {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(R.string.exercises_title),
+                            fontWeight = FontWeight.Bold
                         )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = viewModel::onBackClick) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_arrow_back),
+                                contentDescription = "Navigate back"
+                            )
+                        }
                     }
-                }
-            )
+                )
+                SyncIndicator(
+                    modifier = Modifier.fillMaxWidth(),
+                    isSyncing = isSyncing
+                )
+            }
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.onAddExerciseClick() },
-                modifier = Modifier.padding(16.dp),
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
+                onClick = { viewModel.onAddExerciseClick() }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.workout_add_button)
+                    contentDescription = stringResource(R.string.exercise_add_button)
                 )
             }
         }
     ) { paddingValues ->
-        Box(
+        PullToRefreshBox(
+            isRefreshing = uiState.isRefreshing,
+            onRefresh = viewModel::onRefresh,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            when {
-                uiState.isLoading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-                uiState.exercises.isEmpty() -> {
-                    EmptyState(
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-                else -> {
-                    ExerciseList(
-                        exercises = uiState.exercises,
-                        onExerciseClick = viewModel::onExerciseClick,
-                        onDeleteClick = viewModel::onDeleteExerciseClick
-                    )
-                }
-            }
-
-            uiState.errorMessage?.let { error ->
-                Snackbar(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                    action = {
-                        TextButton(onClick = viewModel::clearError) {
-                            Text("OK")
-                        }
+            Box(modifier = Modifier.fillMaxSize()) {
+                when {
+                    uiState.isLoading && !hasInitialLoadCompleted.value -> {
+                        ExerciseListSkeleton()
                     }
-                ) {
-                    Text(error.asString(context))
+                    uiState.exercises.isEmpty() && hasInitialLoadCompleted.value -> {
+                        EmptyState(
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+                    else -> {
+                        ExerciseList(
+                            exercises = uiState.exercises,
+                            onExerciseClick = viewModel::onExerciseClick,
+                            onDeleteClick = viewModel::onDeleteExerciseClick
+                        )
+                    }
+                }
+
+                uiState.errorMessage?.let { error ->
+                    Snackbar(
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        action = {
+                            TextButton(onClick = viewModel::clearError) {
+                                Text("OK")
+                            }
+                        }
+                    ) {
+                        Text(error.asString(context))
+                    }
                 }
             }
         }
@@ -226,6 +245,8 @@ private fun ExerciseItem(
     onClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
+    var showMenu by remember { mutableStateOf(false) }
+
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
             if (value == SwipeToDismissBoxValue.EndToStart) {
@@ -274,18 +295,10 @@ private fun ExerciseItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (exercise.imageUrl != null) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(exercise.imageUrl)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(64.dp)
-                                .clip(MaterialTheme.shapes.medium),
-                            contentScale = ContentScale.Crop,
-                            placeholder = painterResource(R.drawable.ic_image_placeholder),
-                            error = painterResource(R.drawable.ic_image_error)
+                        ImageWithLoading(
+                            imageUrl = exercise.imageUrl,
+                            modifier = Modifier.size(64.dp),
+                            contentScale = ContentScale.Crop
                         )
                     } else {
                         Box(
@@ -321,20 +334,53 @@ private fun ExerciseItem(
                             Text(
                                 text = exercise.observations,
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Box {
+                        IconButton(onClick = { showMenu = true }) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_more_vert),
+                                contentDescription = "More options",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
 
-                    Icon(
-                        painter = painterResource(R.drawable.ic_chevron_right),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.edit)) },
+                                onClick = {
+                                    showMenu = false
+                                    onClick()
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_edit),
+                                        contentDescription = null
+                                    )
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.delete)) },
+                                onClick = {
+                                    showMenu = false
+                                    onDeleteClick()
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_delete),
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.error
+                                    )
+                                }
+                            )
+                        }
+                    }
                 }
             }
         },

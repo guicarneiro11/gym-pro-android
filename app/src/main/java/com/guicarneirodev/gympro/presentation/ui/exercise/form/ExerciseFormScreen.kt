@@ -1,5 +1,6 @@
 package com.guicarneirodev.gympro.presentation.ui.exercise.form
 
+import android.Manifest
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,14 +23,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.guicarneirodev.gympro.R
+import com.guicarneirodev.gympro.presentation.ui.camera.CameraScreen
+import com.guicarneirodev.gympro.presentation.ui.components.ImageWithLoading
+import com.guicarneirodev.gympro.presentation.ui.gallery.GalleryPicker
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun ExerciseFormScreen(
     onNavigateBack: () -> Unit,
@@ -38,31 +45,78 @@ fun ExerciseFormScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val maxObservationsLength = 200
+
+    var showCamera by remember { mutableStateOf(false) }
+    var showGallery by remember { mutableStateOf(false) }
+    var fileError by remember { mutableStateOf<String?>(null) }
+
+    val cameraPermission = rememberPermissionState(Manifest.permission.CAMERA)
 
     LaunchedEffect(events) {
-        when (val event = events) {
+        when (events) {
             ExerciseFormEvent.NavigateBack -> {
                 onNavigateBack()
                 viewModel.clearEvent()
             }
             ExerciseFormEvent.OpenCamera -> {
-                // TODO: Implement camera
+                showCamera = true
                 viewModel.clearEvent()
             }
             ExerciseFormEvent.OpenGallery -> {
-                // TODO: Implement gallery
+                showGallery = true
                 viewModel.clearEvent()
             }
             ExerciseFormEvent.RequestCameraPermission -> {
-                // TODO: Request camera permission
+                if (cameraPermission.status.isGranted) {
+                    showCamera = true
+                } else {
+                    cameraPermission.launchPermissionRequest()
+                }
                 viewModel.clearEvent()
             }
             ExerciseFormEvent.RequestGalleryPermission -> {
-                // TODO: Request gallery permission
+                showGallery = true
                 viewModel.clearEvent()
             }
             null -> Unit
         }
+    }
+
+    LaunchedEffect(cameraPermission.status) {
+        if (cameraPermission.status.isGranted &&
+            events == ExerciseFormEvent.RequestCameraPermission) {
+            showCamera = true
+        }
+    }
+
+    if (showCamera) {
+        CameraScreen(
+            onImageCaptured = { path ->
+                viewModel.onImageCaptured(path)
+                showCamera = false
+            },
+            onError = {
+                fileError = it.message ?: "Camera error"
+                showCamera = false
+            },
+            onBack = { showCamera = false }
+        )
+        return
+    }
+
+    if (showGallery) {
+        GalleryPicker(
+            onImageSelected = { uri ->
+                viewModel.onImageCaptured(uri.toString())
+                showGallery = false
+            },
+            onDismiss = { showGallery = false },
+            onError = { error ->
+                fileError = error
+                showGallery = false
+            }
+        )
     }
 
     val scrollState = rememberScrollState()
@@ -110,6 +164,24 @@ fun ExerciseFormScreen(
                     }
                 }
             )
+        },
+        snackbarHost = {
+            fileError?.let { error ->
+                Snackbar(
+                    action = {
+                        TextButton(onClick = { fileError = null }) {
+                            Text("OK")
+                        }
+                    }
+                ) {
+                    Text(error)
+                }
+
+                LaunchedEffect(error) {
+                    delay(3000)
+                    fileError = null
+                }
+            }
         }
     ) { paddingValues ->
         Column(
@@ -129,26 +201,22 @@ fun ExerciseFormScreen(
                     .clickable(enabled = !uiState.isLoading) { viewModel.onAddImageClick() },
                 contentAlignment = Alignment.Center
             ) {
+                var isImageLoading by remember { mutableStateOf(false) }
+
                 when {
                     uiState.localImageUri != null -> {
-                        AsyncImage(
-                            model = ImageRequest.Builder(context)
-                                .data(uiState.localImageUri)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = null,
+                        ImageWithLoading(
+                            imageUrl = uiState.localImageUri,
                             modifier = Modifier.fillMaxSize(),
+                            shape = MaterialTheme.shapes.large,
                             contentScale = ContentScale.Crop
                         )
                     }
                     uiState.imageUrl != null -> {
-                        AsyncImage(
-                            model = ImageRequest.Builder(context)
-                                .data(uiState.imageUrl)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = null,
+                        ImageWithLoading(
+                            imageUrl = uiState.imageUrl,
                             modifier = Modifier.fillMaxSize(),
+                            shape = MaterialTheme.shapes.large,
                             contentScale = ContentScale.Crop
                         )
                     }
@@ -172,14 +240,26 @@ fun ExerciseFormScreen(
                     }
                 }
 
-                if (uiState.isUploadingImage) {
+                if (uiState.isUploadingImage || isImageLoading) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator()
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            CircularProgressIndicator()
+                            if (uiState.isUploadingImage) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = stringResource(R.string.uploading_image),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -226,7 +306,11 @@ fun ExerciseFormScreen(
 
             OutlinedTextField(
                 value = uiState.observations,
-                onValueChange = viewModel::onObservationsChange,
+                onValueChange = { newValue ->
+                    if (newValue.length <= maxObservationsLength) {
+                        viewModel.onObservationsChange(newValue)
+                    }
+                },
                 label = { Text(stringResource(R.string.exercise_observations_hint)) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isLoading,
@@ -248,6 +332,13 @@ fun ExerciseFormScreen(
                     Icon(
                         painter = painterResource(R.drawable.ic_notes),
                         contentDescription = null
+                    )
+                },
+                supportingText = {
+                    Text(
+                        text = "${uiState.observations.length}/$maxObservationsLength",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
                     )
                 }
             )

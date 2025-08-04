@@ -118,4 +118,15 @@
 
     <!-- Language -->
     <string name="language_system">Sistema</string>
+
+    <!-- File errors -->
+    <string name="error_file_too_large">Archivo muy grande: %s MB. Máximo permitido es 3MB.</string>
+    <string name="error_reading_file">Error al leer archivo</string>
+
+    <!-- Image loading -->
+    <string name="uploading_image">Subiendo imagen...</string>
+
+    <!-- Sync -->
+    <string name="sync_offline">Modo sin conexión</string>
+    <string name="sync_syncing">Sincronizando…</string>
 </resources>

@@ -7,6 +7,7 @@ import com.guicarneirodev.gympro.domain.model.Workout
 import com.guicarneirodev.gympro.domain.repository.AuthRepository
 import com.guicarneirodev.gympro.domain.repository.WorkoutRepository
 import com.guicarneirodev.gympro.presentation.util.UiText
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 data class WorkoutListUiState(
     val workouts: List<Workout> = emptyList(),
     val isLoading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val errorMessage: UiText? = null,
     val isDeleteDialogVisible: Boolean = false,
     val workoutToDelete: Workout? = null,
@@ -25,6 +27,7 @@ data class WorkoutListUiState(
 
 sealed class WorkoutListEvent {
     data class NavigateToWorkoutDetail(val workoutId: String) : WorkoutListEvent()
+    data class NavigateToEditWorkout(val workoutId: String) : WorkoutListEvent()
     data object NavigateToAddWorkout : WorkoutListEvent()
     data object NavigateToLogin : WorkoutListEvent()
 }
@@ -84,6 +87,10 @@ class WorkoutListViewModel(
         _events.value = WorkoutListEvent.NavigateToAddWorkout
     }
 
+    fun onEditWorkoutClick(workout: Workout) {
+        _events.value = WorkoutListEvent.NavigateToEditWorkout(workout.id)
+    }
+
     fun onDeleteWorkoutClick(workout: Workout) {
         _uiState.update {
             it.copy(
@@ -119,26 +126,21 @@ class WorkoutListViewModel(
         }
     }
 
+    fun onRefresh() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isRefreshing = true) }
+            observeWorkouts()
+            delay(500)
+
+            _uiState.update { it.copy(isRefreshing = false) }
+        }
+    }
+
     fun clearEvent() {
         _events.value = null
     }
 
     fun clearError() {
         _uiState.update { it.copy(errorMessage = null) }
-    }
-
-    fun onLogoutClick() {
-        _uiState.update { it.copy(isLogoutDialogVisible = true) }
-    }
-
-    fun onConfirmLogout() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLogoutDialogVisible = false) }
-            authRepository.signOut()
-        }
-    }
-
-    fun onCancelLogout() {
-        _uiState.update { it.copy(isLogoutDialogVisible = false) }
     }
 }

@@ -6,7 +6,7 @@ import com.guicarneirodev.gympro.presentation.ui.workout.list.WorkoutListViewMod
 import com.guicarneirodev.gympro.presentation.ui.workout.form.WorkoutFormViewModel
 import com.guicarneirodev.gympro.presentation.ui.exercise.list.ExerciseListViewModel
 import com.guicarneirodev.gympro.presentation.ui.exercise.form.ExerciseFormViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.*
 import org.koin.dsl.module
 
 val viewModelModule = module {

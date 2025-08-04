@@ -67,6 +67,9 @@ fun GymProNavHost(
                 onNavigateToAddWorkout = {
                     navController.navigate(Screen.WorkoutForm())
                 },
+                onNavigateToEditWorkout = { workoutId ->
+                    navController.navigate(Screen.WorkoutForm(workoutId))
+                },
                 onNavigateToSettings = {
                     navController.navigate(Screen.Settings)
                 },
@@ -79,7 +82,7 @@ fun GymProNavHost(
         }
 
         composable<Screen.WorkoutForm> { backStackEntry ->
-            val screen = backStackEntry.toRoute<Screen.WorkoutForm>()
+            backStackEntry.toRoute<Screen.WorkoutForm>()
             WorkoutFormScreen(
                 onNavigateBack = {
                     navController.navigateUp()
@@ -115,7 +118,7 @@ fun GymProNavHost(
         }
 
         composable<Screen.ExerciseForm> { backStackEntry ->
-            val screen = backStackEntry.toRoute<Screen.ExerciseForm>()
+            backStackEntry.toRoute<Screen.ExerciseForm>()
             ExerciseFormScreen(
                 onNavigateBack = {
                     navController.navigateUp()

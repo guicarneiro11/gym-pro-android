@@ -25,7 +25,7 @@ fun SettingsScreen(
     onNavigateToLogin: () -> Unit
 ) {
     val auth = koinInject<FirebaseAuth>()
-    val context = LocalContext.current
+    LocalContext.current
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }

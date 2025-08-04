@@ -150,10 +150,6 @@ class WorkoutFormViewModel(
         _events.value = null
     }
 
-    fun clearError() {
-        _uiState.update { it.copy(errorMessage = null) }
-    }
-
     private fun validateInputs(state: WorkoutFormUiState): Boolean {
         return when {
             state.name.isBlank() -> {
