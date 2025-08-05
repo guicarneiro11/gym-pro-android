@@ -56,7 +56,6 @@ fun SettingsScreen(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            // User Profile Section
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -90,7 +89,6 @@ fun SettingsScreen(
                 }
             }
 
-            // Settings Items
             SettingsSection(title = stringResource(R.string.settings_preferences)) {
                 SettingsItem(
                     icon = R.drawable.ic_theme,
@@ -110,11 +108,6 @@ fun SettingsScreen(
                     title = stringResource(R.string.settings_version),
                     subtitle = BuildConfig.VERSION_NAME
                 )
-                SettingsItem(
-                    icon = R.drawable.ic_privacy,
-                    title = stringResource(R.string.settings_privacy_policy),
-                    onClick = { /* TODO: Open privacy policy */ }
-                )
             }
 
             SettingsSection {
@@ -128,7 +121,6 @@ fun SettingsScreen(
         }
     }
 
-    // Dialogs
     if (showLogoutDialog) {
         LogoutDialog(
             onConfirm = {

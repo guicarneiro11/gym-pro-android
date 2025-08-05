@@ -23,7 +23,7 @@ sealed class RegisterEvent {
     data object NavigateBack : RegisterEvent()
 }
 
-class RegisterViewModel(
+open class RegisterViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -76,6 +76,14 @@ class RegisterViewModel(
         _events.value = null
     }
 
+    protected open fun isValidEmail(email: String): Boolean {
+        return try {
+            android.util.Patterns.EMAIL_ADDRESS?.matcher(email)?.matches() ?: email.contains("@")
+        } catch (_: Exception) {
+            email.contains("@") && email.contains(".")
+        }
+    }
+
     private fun validateInputs(state: RegisterUiState): Boolean {
         return when {
             state.email.isBlank() -> {
@@ -84,7 +92,7 @@ class RegisterViewModel(
                 }
                 false
             }
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(state.email).matches() -> {
+            !isValidEmail(state.email) -> {
                 _uiState.update {
                     it.copy(errorMessage = UiText.StringResource(R.string.login_error_invalid_email))
                 }

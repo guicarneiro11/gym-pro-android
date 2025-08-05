@@ -182,7 +182,6 @@ fun LanguageDialog(
 
 private fun changeAppLanguage(context: Context, languageCode: String) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        // Android 13+ usa LocaleManager
         context.getSystemService(LocaleManager::class.java).applicationLocales =
             if (languageCode == "system") {
                 LocaleList.getEmptyLocaleList()
@@ -190,7 +189,6 @@ private fun changeAppLanguage(context: Context, languageCode: String) {
                 LocaleList.forLanguageTags(languageCode)
             }
     } else {
-        // Android 12 e anteriores usa AppCompatDelegate
         val locale = when (languageCode) {
             "system" -> LocaleListCompat.getEmptyLocaleList()
             "pt" -> LocaleListCompat.create(Locale("pt", "BR"))

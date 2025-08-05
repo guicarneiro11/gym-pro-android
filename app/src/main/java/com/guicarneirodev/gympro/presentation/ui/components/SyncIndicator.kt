@@ -1,7 +1,6 @@
 package com.guicarneirodev.gympro.presentation.ui.components
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,7 +11,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.guicarneirodev.gympro.R
 import com.guicarneirodev.gympro.data.util.NetworkMonitor
-import kotlinx.coroutines.flow.Flow
 import org.koin.compose.koinInject
 
 @Composable
@@ -74,9 +72,4 @@ fun SyncIndicator(
             }
         }
     }
-}
-
-@Composable
-fun collectAsState(flow: Flow<Boolean>, initial: Boolean = false): State<Boolean> {
-    return flow.collectAsState(initial = initial)
 }

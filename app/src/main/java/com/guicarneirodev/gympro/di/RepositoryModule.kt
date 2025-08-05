@@ -26,8 +26,7 @@ val repositoryModule = module {
             firestore = get(),
             workoutDao = get(),
             networkMonitor = get(),
-            syncManager = get(),
-            getCurrentUserId = { get<FirebaseAuth>().currentUser?.uid }
+            syncManager = get()
         )
     }
 

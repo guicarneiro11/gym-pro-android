@@ -17,8 +17,7 @@ class WorkoutRepositoryImpl(
     firestore: FirebaseFirestore,
     private val workoutDao: WorkoutDao,
     private val networkMonitor: NetworkMonitor,
-    private val syncManager: SyncManager,
-    private val getCurrentUserId: () -> String?
+    private val syncManager: SyncManager
 ) : WorkoutRepository {
 
     private val workoutsCollection = firestore.collection("workouts")
