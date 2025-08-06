@@ -38,9 +38,6 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             userPreferencesManager.userPreferences.collect { prefs ->
-                if (prefs.language != "system" && prefs.language.isNotEmpty()) {
-                    // Idioma já aplicado
-                }
                 isReady = true
             }
         }

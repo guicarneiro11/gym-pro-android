@@ -9,7 +9,7 @@ import com.guicarneirodev.gympro.data.local.entity.WorkoutEntity
 
 @Database(
     entities = [WorkoutEntity::class, ExerciseEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class GymProDatabase : RoomDatabase() {

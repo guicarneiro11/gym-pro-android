@@ -45,6 +45,7 @@ fun ExerciseFormScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val maxNameLength = 100
     val maxObservationsLength = 200
 
     var showCamera by remember { mutableStateOf(false) }
@@ -283,7 +284,11 @@ fun ExerciseFormScreen(
 
             OutlinedTextField(
                 value = uiState.name,
-                onValueChange = viewModel::onNameChange,
+                onValueChange = { newValue ->
+                    if (newValue.length <= maxNameLength) {
+                        viewModel.onNameChange(newValue)
+                    }
+                },
                 label = { Text(stringResource(R.string.exercise_name_hint)) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isLoading,
@@ -300,6 +305,14 @@ fun ExerciseFormScreen(
                     Icon(
                         painter = painterResource(R.drawable.ic_exercise),
                         contentDescription = null
+                    )
+                },
+                supportingText = {
+                    Text(
+                        text = "${uiState.name.length}/$maxNameLength",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             )

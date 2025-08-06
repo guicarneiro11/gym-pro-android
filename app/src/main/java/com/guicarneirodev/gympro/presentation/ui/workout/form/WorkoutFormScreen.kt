@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.guicarneirodev.gympro.R
@@ -32,6 +33,8 @@ fun WorkoutFormScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val events by viewModel.events.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val maxNameLength = 100
+    val maxDescriptionLength = 200
 
     LaunchedEffect(events) {
         when (val event = events) {
@@ -104,7 +107,11 @@ fun WorkoutFormScreen(
         ) {
             OutlinedTextField(
                 value = uiState.name,
-                onValueChange = viewModel::onNameChange,
+                onValueChange = { newValue ->
+                    if (newValue.length <= maxNameLength) {
+                        viewModel.onNameChange(newValue)
+                    }
+                },
                 label = { Text(stringResource(R.string.workout_name_hint)) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isLoading,
@@ -122,12 +129,24 @@ fun WorkoutFormScreen(
                         painter = painterResource(R.drawable.ic_workout),
                         contentDescription = null
                     )
+                },
+                supportingText = {
+                    Text(
+                        text = "${uiState.name.length}/$maxNameLength",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
             )
 
             OutlinedTextField(
                 value = uiState.description,
-                onValueChange = viewModel::onDescriptionChange,
+                onValueChange = { newValue ->
+                    if (newValue.length <= maxDescriptionLength) {
+                        viewModel.onDescriptionChange(newValue)
+                    }
+                },
                 label = { Text(stringResource(R.string.workout_description_hint)) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isLoading,
@@ -149,6 +168,14 @@ fun WorkoutFormScreen(
                     Icon(
                         painter = painterResource(R.drawable.ic_description),
                         contentDescription = null
+                    )
+                },
+                supportingText = {
+                    Text(
+                        text = "${uiState.description.length}/$maxDescriptionLength",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             )

@@ -34,16 +34,42 @@ class ExerciseRepositoryImpl(
     override suspend fun createExercise(exercise: Exercise): Result<String> {
         return try {
             val documentRef = exercisesCollection.document()
-            val exerciseWithId = exercise.copy(id = documentRef.id)
 
-            exerciseDao.insertExercise(exerciseWithId.toEntity())
+            val maxPosition = exerciseDao.getMaxPosition(exercise.workoutId) ?: -1
+            val exerciseWithIdAndPosition = exercise.copy(
+                id = documentRef.id,
+                position = maxPosition + 1
+            )
+
+            exerciseDao.insertExercise(exerciseWithIdAndPosition.toEntity())
 
             val isOnline = networkMonitor.isOnline.first()
             if (isOnline) {
-                documentRef.set(exerciseWithId.toDto()).await()
+                documentRef.set(exerciseWithIdAndPosition.toDto()).await()
             }
 
             Result.success(documentRef.id)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun reorderExercises(exercises: List<Exercise>): Result<Unit> {
+        return try {
+            exercises.forEach { exercise ->
+                exerciseDao.insertExercise(exercise.toEntity())
+            }
+
+            val isOnline = networkMonitor.isOnline.first()
+            if (isOnline) {
+                exercises.forEach { exercise ->
+                    exercisesCollection.document(exercise.id)
+                        .update("position", exercise.position)
+                        .await()
+                }
+            }
+
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -56,7 +82,13 @@ class ExerciseRepositoryImpl(
             val isOnline = networkMonitor.isOnline.first()
             if (isOnline) {
                 exercisesCollection.document(exercise.id)
-                    .set(exercise.toDto())
+                    .update(
+                        mapOf(
+                            "name" to exercise.name,
+                            "observations" to exercise.observations,
+                            "imageUrl" to exercise.imageUrl
+                        )
+                    )
                     .await()
             }
 

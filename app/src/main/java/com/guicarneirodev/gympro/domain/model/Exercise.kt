@@ -5,5 +5,6 @@ data class Exercise(
     val workoutId: String = "",
     val name: String = "",
     val imageUrl: String? = null,
-    val observations: String = ""
+    val observations: String = "",
+    val position: Int = 0
 )

@@ -50,6 +50,7 @@
     <!-- Errors -->
     <string name="error_loading_workouts">Error al cargar entrenamientos</string>
     <string name="error_deleting_workout">Error al eliminar entrenamiento</string>
+    <string name="error_reordering_exercises">Error al reordenar ejercicios</string>
 
     <!-- Workout Errors -->
     <string name="error_loading_workout">Error al cargar entrenamiento</string>

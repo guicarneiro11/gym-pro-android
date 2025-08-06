@@ -22,5 +22,6 @@ data class ExerciseEntity(
     val name: String,
     val observations: String,
     val imageUrl: String?,
+    val position: Int = 0,
     val lastSyncedAt: Long = System.currentTimeMillis()
 )

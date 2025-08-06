@@ -166,6 +166,7 @@ fun LanguageDialog(
                     scope.launch {
                         userPreferencesManager.setLanguage(selectedLanguage)
                         changeAppLanguage(context, selectedLanguage)
+                        onDismiss()
                     }
                 }
             ) {

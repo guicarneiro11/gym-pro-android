@@ -164,6 +164,12 @@ class WorkoutFormViewModel(
                 }
                 false
             }
+            state.description.length > 200 -> {
+                _uiState.update {
+                    it.copy(errorMessage = UiText.DynamicString("Description too long"))
+                }
+                false
+            }
             else -> true
         }
     }

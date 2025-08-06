@@ -11,7 +11,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 data class ExerciseListUiState(
@@ -91,6 +90,46 @@ class ExerciseListViewModel(
                     _uiState.update {
                         it.copy(
                             errorMessage = UiText.StringResource(R.string.error_deleting_exercise)
+                        )
+                    }
+                }
+        }
+    }
+
+    fun onMoveExerciseUp(index: Int) {
+        if (index <= 0) return
+        moveExercise(index, index - 1)
+    }
+
+    fun onMoveExerciseDown(index: Int) {
+        val exercises = _uiState.value.exercises
+        if (index >= exercises.size - 1) return
+        moveExercise(index, index + 1)
+    }
+
+    private fun moveExercise(fromIndex: Int, toIndex: Int) {
+        val currentList = _uiState.value.exercises.toMutableList()
+
+        if (fromIndex < 0 || toIndex < 0 ||
+            fromIndex >= currentList.size || toIndex >= currentList.size) {
+            return
+        }
+
+        val exercise = currentList.removeAt(fromIndex)
+        currentList.add(toIndex, exercise)
+
+        val reorderedList = currentList.mapIndexed { index, ex ->
+            ex.copy(position = index)
+        }
+
+        _uiState.update { it.copy(exercises = reorderedList) }
+
+        viewModelScope.launch {
+            exerciseRepository.reorderExercises(reorderedList)
+                .onFailure {
+                    _uiState.update {
+                        it.copy(
+                            errorMessage = UiText.StringResource(R.string.error_reordering_exercises)
                         )
                     }
                 }

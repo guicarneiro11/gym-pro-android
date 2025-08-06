@@ -33,7 +33,8 @@ fun ExerciseEntity.toDomain(): Exercise {
         workoutId = workoutId,
         name = name,
         observations = observations,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        position = position
     )
 }
 
@@ -43,6 +44,7 @@ fun Exercise.toEntity(): ExerciseEntity {
         workoutId = workoutId,
         name = name,
         observations = observations,
-        imageUrl = imageUrl
+        imageUrl = imageUrl,
+        position = position
     )
 }

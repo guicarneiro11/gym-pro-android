@@ -10,4 +10,5 @@ interface ExerciseRepository {
     suspend fun getExercise(exerciseId: String): Result<Exercise>
     fun getExercisesByWorkout(workoutId: String): Flow<List<Exercise>>
     suspend fun uploadExerciseImage(exerciseId: String, imageUri: String): Result<String>
+    suspend fun reorderExercises(exercises: List<Exercise>): Result<Unit>
 }

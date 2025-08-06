@@ -54,7 +54,6 @@ open class RegisterViewModel(
 
             authRepository.signUp(state.email, state.password)
                 .onSuccess {
-                    createTestUser()
                     _events.value = RegisterEvent.NavigateToHome
                 }
                 .onFailure { exception ->
@@ -136,19 +135,6 @@ open class RegisterViewModel(
                 UiText.StringResource(R.string.login_error_short_password)
             else ->
                 UiText.StringResource(R.string.error_generic)
-        }
-    }
-
-    private fun createTestUser() {
-        viewModelScope.launch {
-            try {
-                authRepository.signUp(
-                    "teste@gympro.com",
-                    "teste123"
-                )
-            } catch (_: Exception) {
-                // Usuário teste já existe
-            }
         }
     }
 }

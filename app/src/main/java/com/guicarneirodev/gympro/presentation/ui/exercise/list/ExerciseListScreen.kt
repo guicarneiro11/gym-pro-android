@@ -3,7 +3,7 @@ package com.guicarneirodev.gympro.presentation.ui.exercise.list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -100,14 +100,18 @@ fun ExerciseListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.onAddExerciseClick() }
+                onClick = { viewModel.onAddExerciseClick() },
+                modifier = Modifier.padding(16.dp),
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add),
                     contentDescription = stringResource(R.string.exercise_add_button)
                 )
             }
-        }
+        },
+        floatingActionButtonPosition = FabPosition.End
     ) { paddingValues ->
         PullToRefreshBox(
             isRefreshing = uiState.isRefreshing,
@@ -130,7 +134,9 @@ fun ExerciseListScreen(
                         ExerciseList(
                             exercises = uiState.exercises,
                             onExerciseClick = viewModel::onExerciseClick,
-                            onDeleteClick = viewModel::onDeleteExerciseClick
+                            onDeleteClick = viewModel::onDeleteExerciseClick,
+                            onMoveUp = viewModel::onMoveExerciseUp,
+                            onMoveDown = viewModel::onMoveExerciseDown
                         )
                     }
                 }
@@ -219,20 +225,26 @@ private fun EmptyState(
 private fun ExerciseList(
     exercises: List<Exercise>,
     onExerciseClick: (Exercise) -> Unit,
-    onDeleteClick: (Exercise) -> Unit
+    onDeleteClick: (Exercise) -> Unit,
+    onMoveUp: (Int) -> Unit,
+    onMoveDown: (Int) -> Unit
 ) {
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(
+        itemsIndexed(
             items = exercises,
-            key = { it.id }
-        ) { exercise ->
+            key = { _, item -> item.id }
+        ) { index, exercise ->
             ExerciseItem(
                 exercise = exercise,
+                position = index,
+                totalItems = exercises.size,
                 onClick = { onExerciseClick(exercise) },
-                onDeleteClick = { onDeleteClick(exercise) }
+                onDeleteClick = { onDeleteClick(exercise) },
+                onMoveUp = { onMoveUp(index) },
+                onMoveDown = { onMoveDown(index) }
             )
         }
     }
@@ -242,8 +254,12 @@ private fun ExerciseList(
 @Composable
 private fun ExerciseItem(
     exercise: Exercise,
+    position: Int,
+    totalItems: Int,
     onClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onMoveUp: () -> Unit,
+    onMoveDown: () -> Unit
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
@@ -338,7 +354,37 @@ private fun ExerciseItem(
                             )
                         }
                     }
+                    Column {
+                        IconButton(
+                            onClick = onMoveUp,
+                            enabled = position > 0,
+                            modifier = Modifier.size(32.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_arrow_up),
+                                contentDescription = "Move up",
+                                tint = if (position > 0)
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                else
+                                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                            )
+                        }
 
+                        IconButton(
+                            onClick = onMoveDown,
+                            enabled = position < totalItems - 1,
+                            modifier = Modifier.size(32.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_arrow_down),
+                                contentDescription = "Move down",
+                                tint = if (position < totalItems - 1)
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                else
+                                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                            )
+                        }
+                    }
                     Box {
                         IconButton(onClick = { showMenu = true }) {
                             Icon(

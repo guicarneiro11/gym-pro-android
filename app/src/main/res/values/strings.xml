@@ -50,6 +50,7 @@
     <!-- Errors -->
     <string name="error_loading_workouts">Error loading workouts</string>
     <string name="error_deleting_workout">Error deleting workout</string>
+    <string name="error_reordering_exercises">Error reordering exercises</string>
 
     <!-- Workout Errors -->
     <string name="error_loading_workout">Error loading workout</string>
