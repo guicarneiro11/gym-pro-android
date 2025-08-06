@@ -22,6 +22,10 @@
     <string name="login_error_short_password">Password must be at least 6 characters</string>
     <string name="login_error_wrong_password">Incorrect password</string>
     <string name="login_error_user_not_found">User not found</string>
+    <string name="login_error_empty_password">Please enter your password</string>
+    <string name="login_error_invalid_credentials">Invalid email or password</string>
+    <string name="login_error_invalid_email_format">Invalid email format</string>
+    <string name="login_error_too_many_attempts">Too many failed attempts. Please try again later</string>
 
     <!-- Register -->
     <string name="register_title">Create Account</string>
@@ -30,6 +34,16 @@
     <string name="register_error_passwords_not_match">Passwords do not match</string>
     <string name="register_error_weak_password">Password must contain letters and numbers</string>
     <string name="register_error_email_in_use">This email is already registered</string>
+    <string name="register_error_empty_email">Please enter your email</string>
+    <string name="register_error_invalid_email">Invalid email format</string>
+    <string name="register_error_empty_password">Please enter a password</string>
+    <string name="register_error_short_password">Password must be at least 6 characters</string>
+    <string name="register_error_empty_confirm_password">Please confirm your password</string>
+    <string name="register_error_weak_password_firebase">Password is too weak. Use at least 6 characters with letters and numbers</string>
+    <string name="register_error_invalid_email_format">Please enter a valid email address</string>
+    <string name="register_error_email_already_exists">This email is already registered. Try logging in instead</string>
+    <string name="register_error_operation_not_allowed">Registration is temporarily disabled. Please try again later</string>
+    <string name="register_error_generic">Failed to create account. Please try again</string>
 
     <!-- Workouts -->
     <string name="workouts_title">My Workouts</string>

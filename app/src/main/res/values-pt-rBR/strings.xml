@@ -22,6 +22,10 @@
     <string name="login_error_short_password">Senha deve ter pelo menos 6 caracteres</string>
     <string name="login_error_wrong_password">Senha incorreta</string>
     <string name="login_error_user_not_found">Usuário não encontrado</string>
+    <string name="login_error_empty_password">Digite sua senha</string>
+    <string name="login_error_invalid_credentials">E-mail ou senha incorretos</string>
+    <string name="login_error_invalid_email_format">Formato de e-mail inválido</string>
+    <string name="login_error_too_many_attempts">Muitas tentativas falhadas. Tente novamente mais tarde</string>
 
     <!-- Register -->
     <string name="register_title">Criar Conta</string>
@@ -30,6 +34,16 @@
     <string name="register_error_passwords_not_match">As senhas não coincidem</string>
     <string name="register_error_weak_password">Senha deve conter letras e números</string>
     <string name="register_error_email_in_use">Este e-mail já está cadastrado</string>
+    <string name="register_error_empty_email">Digite seu e-mail</string>
+    <string name="register_error_invalid_email">Formato de e-mail inválido</string>
+    <string name="register_error_empty_password">Digite uma senha</string>
+    <string name="register_error_short_password">A senha deve ter pelo menos 6 caracteres</string>
+    <string name="register_error_empty_confirm_password">Confirme sua senha</string>
+    <string name="register_error_weak_password_firebase">Senha muito fraca. Use pelo menos 6 caracteres com letras e números</string>
+    <string name="register_error_invalid_email_format">Digite um endereço de e-mail válido</string>
+    <string name="register_error_email_already_exists">Este e-mail já está cadastrado. Tente fazer login</string>
+    <string name="register_error_operation_not_allowed">Cadastro temporariamente desabilitado. Tente novamente mais tarde</string>
+    <string name="register_error_generic">Falha ao criar conta. Tente novamente</string>
 
     <!-- Workouts -->
     <string name="workouts_title">Meus Treinos</string>

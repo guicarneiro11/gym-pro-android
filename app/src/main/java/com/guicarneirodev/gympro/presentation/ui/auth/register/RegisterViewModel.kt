@@ -2,6 +2,9 @@ package com.guicarneirodev.gympro.presentation.ui.auth.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.guicarneirodev.gympro.R
 import com.guicarneirodev.gympro.domain.repository.AuthRepository
 import com.guicarneirodev.gympro.presentation.util.UiText
@@ -87,19 +90,31 @@ open class RegisterViewModel(
         return when {
             state.email.isBlank() -> {
                 _uiState.update {
-                    it.copy(errorMessage = UiText.StringResource(R.string.login_error_empty_email))
+                    it.copy(errorMessage = UiText.StringResource(R.string.register_error_empty_email))
                 }
                 false
             }
             !isValidEmail(state.email) -> {
                 _uiState.update {
-                    it.copy(errorMessage = UiText.StringResource(R.string.login_error_invalid_email))
+                    it.copy(errorMessage = UiText.StringResource(R.string.register_error_invalid_email))
+                }
+                false
+            }
+            state.password.isBlank() -> {
+                _uiState.update {
+                    it.copy(errorMessage = UiText.StringResource(R.string.register_error_empty_password))
                 }
                 false
             }
             state.password.length < 6 -> {
                 _uiState.update {
-                    it.copy(errorMessage = UiText.StringResource(R.string.login_error_short_password))
+                    it.copy(errorMessage = UiText.StringResource(R.string.register_error_short_password))
+                }
+                false
+            }
+            state.confirmPassword.isBlank() -> {
+                _uiState.update {
+                    it.copy(errorMessage = UiText.StringResource(R.string.register_error_empty_confirm_password))
                 }
                 false
             }
@@ -122,19 +137,44 @@ open class RegisterViewModel(
     private fun isPasswordStrong(password: String): Boolean {
         val hasLetter = password.any { it.isLetter() }
         val hasDigit = password.any { it.isDigit() }
-        return hasLetter && hasDigit
+        return hasLetter && hasDigit && password.length >= 6
     }
 
     private fun getErrorMessage(exception: Throwable): UiText {
-        return when {
-            exception.message?.contains("network") == true ->
-                UiText.StringResource(R.string.error_connection)
-            exception.message?.contains("email-already-in-use") == true ->
-                UiText.StringResource(R.string.register_error_email_in_use)
-            exception.message?.contains("weak-password") == true ->
-                UiText.StringResource(R.string.login_error_short_password)
-            else ->
-                UiText.StringResource(R.string.error_generic)
+        return when (exception) {
+            is FirebaseAuthWeakPasswordException -> {
+                UiText.StringResource(R.string.register_error_weak_password_firebase)
+            }
+            is FirebaseAuthInvalidCredentialsException -> {
+                UiText.StringResource(R.string.register_error_invalid_email_format)
+            }
+            is FirebaseAuthUserCollisionException -> {
+                UiText.StringResource(R.string.register_error_email_already_exists)
+            }
+            else -> {
+                when {
+                    exception.message?.contains("network", ignoreCase = true) == true ||
+                            exception.message?.contains("connection", ignoreCase = true) == true ->
+                        UiText.StringResource(R.string.error_connection)
+
+                    exception.message?.contains("email-already-in-use", ignoreCase = true) == true ||
+                            exception.message?.contains("already in use", ignoreCase = true) == true ||
+                            exception.message?.contains("already exists", ignoreCase = true) == true ->
+                        UiText.StringResource(R.string.register_error_email_already_exists)
+
+                    exception.message?.contains("weak-password", ignoreCase = true) == true ->
+                        UiText.StringResource(R.string.register_error_weak_password_firebase)
+
+                    exception.message?.contains("invalid-email", ignoreCase = true) == true ->
+                        UiText.StringResource(R.string.register_error_invalid_email_format)
+
+                    exception.message?.contains("operation-not-allowed", ignoreCase = true) == true ->
+                        UiText.StringResource(R.string.register_error_operation_not_allowed)
+
+                    else ->
+                        UiText.StringResource(R.string.register_error_generic)
+                }
+            }
         }
     }
 }

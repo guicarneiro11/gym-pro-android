@@ -22,6 +22,10 @@
     <string name="login_error_short_password">La contraseña debe tener al menos 6 caracteres</string>
     <string name="login_error_wrong_password">Contraseña incorrecta</string>
     <string name="login_error_user_not_found">Usuario no encontrado</string>
+    <string name="login_error_empty_password">Por favor ingresa tu contraseña</string>
+    <string name="login_error_invalid_credentials">Correo o contraseña incorrectos</string>
+    <string name="login_error_invalid_email_format">Formato de correo inválido</string>
+    <string name="login_error_too_many_attempts">Demasiados intentos fallidos. Intenta nuevamente más tarde</string>
 
     <!-- Register -->
     <string name="register_title">Crear Cuenta</string>
@@ -30,6 +34,16 @@
     <string name="register_error_passwords_not_match">Las contraseñas no coinciden</string>
     <string name="register_error_weak_password">La contraseña debe contener letras y números</string>
     <string name="register_error_email_in_use">Este correo ya está registrado</string>
+    <string name="register_error_empty_email">Ingresa tu correo</string>
+    <string name="register_error_invalid_email">Formato de correo inválido</string>
+    <string name="register_error_empty_password">Ingresa una contraseña</string>
+    <string name="register_error_short_password">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="register_error_empty_confirm_password">Confirma tu contraseña</string>
+    <string name="register_error_weak_password_firebase">Contraseña muy débil. Usa al menos 6 caracteres con letras y números</string>
+    <string name="register_error_invalid_email_format">Ingresa una dirección de correo válida</string>
+    <string name="register_error_email_already_exists">Este correo ya está registrado. Intenta iniciar sesión</string>
+    <string name="register_error_operation_not_allowed">Registro temporalmente deshabilitado. Intenta nuevamente más tarde</string>
+    <string name="register_error_generic">Error al crear cuenta. Intenta nuevamente</string>
 
     <!-- Workouts -->
     <string name="workouts_title">Mis Entrenamientos</string>

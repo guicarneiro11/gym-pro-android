@@ -2,6 +2,8 @@ package com.guicarneirodev.gympro.presentation.ui.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.guicarneirodev.gympro.R
 import com.guicarneirodev.gympro.domain.repository.AuthRepository
 import com.guicarneirodev.gympro.presentation.util.UiText
@@ -33,11 +35,11 @@ open class LoginViewModel(
     val events = _events.asStateFlow()
 
     fun onEmailChange(email: String) {
-        _uiState.update { it.copy(email = email) }
+        _uiState.update { it.copy(email = email, errorMessage = null) }
     }
 
     fun onPasswordChange(password: String) {
-        _uiState.update { it.copy(password = password) }
+        _uiState.update { it.copy(password = password, errorMessage = null) }
     }
 
     fun onLoginClick() {
@@ -84,6 +86,12 @@ open class LoginViewModel(
                 }
                 false
             }
+            state.password.isBlank() -> {
+                _uiState.update {
+                    it.copy(errorMessage = UiText.StringResource(R.string.login_error_empty_password))
+                }
+                false
+            }
             state.password.length < 6 -> {
                 _uiState.update {
                     it.copy(errorMessage = UiText.StringResource(R.string.login_error_short_password))
@@ -103,15 +111,47 @@ open class LoginViewModel(
     }
 
     private fun getErrorMessage(exception: Throwable): UiText {
-        return when {
-            exception.message?.contains("network") == true ->
-                UiText.StringResource(R.string.error_connection)
-            exception.message?.contains("password") == true ->
-                UiText.StringResource(R.string.login_error_wrong_password)
-            exception.message?.contains("user") == true ->
+        return when (exception) {
+            is FirebaseAuthInvalidUserException -> {
                 UiText.StringResource(R.string.login_error_user_not_found)
-            else ->
-                UiText.StringResource(R.string.error_generic)
+            }
+            is FirebaseAuthInvalidCredentialsException -> {
+                when {
+                    exception.errorCode == "ERROR_WRONG_PASSWORD" ->
+                        UiText.StringResource(R.string.login_error_wrong_password)
+                    exception.errorCode == "ERROR_INVALID_EMAIL" ->
+                        UiText.StringResource(R.string.login_error_invalid_email_format)
+                    else ->
+                        UiText.StringResource(R.string.login_error_invalid_credentials)
+                }
+            }
+            else -> {
+                when {
+                    exception.message?.contains("network", ignoreCase = true) == true ||
+                            exception.message?.contains("connection", ignoreCase = true) == true ->
+                        UiText.StringResource(R.string.error_connection)
+
+                    exception.message?.contains("password", ignoreCase = true) == true ->
+                        UiText.StringResource(R.string.login_error_wrong_password)
+
+                    exception.message?.contains("user", ignoreCase = true) == true ||
+                            exception.message?.contains("account", ignoreCase = true) == true ->
+                        UiText.StringResource(R.string.login_error_user_not_found)
+
+                    exception.message?.contains("email", ignoreCase = true) == true ->
+                        UiText.StringResource(R.string.login_error_invalid_email_format)
+
+                    exception.message?.contains("credential", ignoreCase = true) == true ->
+                        UiText.StringResource(R.string.login_error_invalid_credentials)
+
+                    exception.message?.contains("too many", ignoreCase = true) == true ||
+                            exception.message?.contains("blocked", ignoreCase = true) == true ->
+                        UiText.StringResource(R.string.login_error_too_many_attempts)
+
+                    else ->
+                        UiText.StringResource(R.string.login_error_invalid_credentials)
+                }
+            }
         }
     }
 }
