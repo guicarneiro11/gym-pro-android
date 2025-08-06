@@ -120,7 +120,7 @@ O projeto já inclui `google-services.json` configurado com ambiente de desenvol
    - Cloud Storage
 5. Configure as Security Rules conforme documentação
 
-## 🎨 UI/UX
+## UI/UX
 
 - **Material Design 3** com Material You
 - **Compose** para UI declarativa
